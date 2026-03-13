@@ -1,0 +1,59 @@
+name: "QGIA Spine Knowledge Index Publisher"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.md'
+      - '!README.md'
+      - '!STRUCTURE.md'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-index:
+    name: Generate & Publish Knowledge Index
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate knowledge index
+        run: python scripts/generate-knowledge-index.py
+
+      - name: Commit updated index
+        run: |
+          git config user.name "aurora-constellation[bot]"
+          git config user.email "aurora-constellation[bot]@users.noreply.github.com"
+          git add .aurora/knowledge-index.json
+          git diff --cached --quiet || git commit -m "chore: auto-update knowledge index [skip ci]"
+          git push
+
+      - name: Publish event to Constellation Hub
+        if: success()
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CONSTELLATION_TOKEN }}
+          repository: AUo959/aurora-cloudbank-symbolic
+          event-type: qgia.knowledge.updated
+          client-payload: >-
+            {
+              "source_node": "QGIA-SPINE",
+              "source_repo": "qgia-knowledge-spine",
+              "event_type": "qgia.knowledge.updated",
+              "correlation_id": "${{ github.run_id }}-${{ github.run_number }}",
+              "timestamp": "${{ github.event.head_commit.timestamp }}",
+              "payload": {
+                "commit_sha": "${{ github.sha }}",
+                "commit_message": "${{ github.event.head_commit.message }}",
+                "index_url": "https://raw.githubusercontent.com/AUo959/qgia-knowledge-spine/main/.aurora/knowledge-index.json"
+              }
+            }

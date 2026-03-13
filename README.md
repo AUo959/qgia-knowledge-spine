@@ -111,3 +111,23 @@ Classification: TS/SCI
 ---
 
 *"Probabilistic forecasts with quantified confidence - 127-day early warning capability"*
+
+---
+
+## Constellation Integration
+
+This repository is node **QGIA-SPINE** (`s.tag::qgia.spine`) in the Aurora Constellation.
+
+### Auto-Indexing
+When methodology documents are pushed to `main`, a GitHub Actions workflow automatically:
+1. Scans all spine documents
+2. Generates `.aurora/knowledge-index.json`
+3. Publishes a `qgia.knowledge.updated` event to CONSTELLATION-PRIME
+
+### Manifest
+The node manifest is at `.aurora/constellation.json`.
+
+### Related Nodes
+- **CONSTELLATION-PRIME** — [aurora-cloudbank-symbolic](https://github.com/AUo959/aurora-cloudbank-symbolic) (hub)
+- **QGIA-CORPUS** — [qgia-knowledge-library](https://github.com/AUo959/qgia-knowledge-library) (domain knowledge)
+- **AURORA-RUNTIME** — [AuroraOS](https://github.com/AUo959/AuroraOS) (agent runtime)
