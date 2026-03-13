@@ -1,0 +1,67 @@
+{
+  "version": "1.0.0",
+  "source_repo": "qgia-knowledge-spine",
+  "generated_at": "2026-03-13T15:11:31.327536+00:00",
+  "documents": [
+    {
+      "id": "qgia-spine:01_forecasting_methodologies",
+      "title": "Forecasting Methodologies Framework",
+      "domain": "tier1-methodological-foundations",
+      "path": "01_forecasting_methodologies.md",
+      "checksum": "4e683f9ba4209756",
+      "word_count": 3579,
+      "last_modified": "2026-03-13T15:10:04.888613+00:00",
+      "tags": [
+        "executive-overview",
+        "i-superforecasting-framework",
+        "ii-calibration-and-validation",
+        "iii-temporal-dynamics",
+        "iv-qgia-integration-protocols",
+        "v-historical-validation",
+        "vi-operational-protocols",
+        "vii-intelligence-collection-requirements",
+        "viii-references",
+        "ix-appendices"
+      ],
+      "summary": "**QGIA Knowledge Spine - Document 01** **Classification**: UNCLASSIFIED // FOR OFFICIAL USE ONLY **Version**: 1.0.0 **Last Updated**: February 15, 2026 **Review Cycle**: Quarterly"
+    },
+    {
+      "id": "qgia-spine:02_bayesian_frameworks",
+      "title": "Bayesian Frameworks for Belief Updating",
+      "domain": "tier1-methodological-foundations",
+      "path": "02_bayesian_frameworks.md",
+      "checksum": "ad88418bebf948d3",
+      "word_count": 2703,
+      "last_modified": "2026-03-13T15:10:04.888613+00:00",
+      "tags": [
+        "executive-overview",
+        "i-fundamental-bayesian-framework",
+        "ii-hierarchical-bayesian-models",
+        "iii-bayesian-networks",
+        "iv-advanced-bayesian-techniques",
+        "v-integration-with-qgia-quantum-frameworks",
+        "vi-operational-protocols",
+        "vii-references"
+      ],
+      "summary": "**QGIA Knowledge Spine - Document 02** **Classification**: UNCLASSIFIED // FOR OFFICIAL USE ONLY **Version**: 1.0.0 **Last Updated**: February 15, 2026"
+    },
+    {
+      "id": "qgia-spine:03_scenario_planning",
+      "title": "Scenario Planning and Strategic Foresight",
+      "domain": "tier1-methodological-foundations",
+      "path": "03_scenario_planning.md",
+      "checksum": "6094156bc2ebaeb2",
+      "word_count": 1820,
+      "last_modified": "2026-03-13T15:10:04.888613+00:00",
+      "tags": [
+        "executive-overview",
+        "i-shell-scenario-planning-method",
+        "ii-horizon-scanning",
+        "iii-integration-with-qgia-quantum-frameworks",
+        "iv-operational-protocols",
+        "v-references"
+      ],
+      "summary": "**QGIA Knowledge Spine - Document 03** **Classification**: UNCLASSIFIED // FOR OFFICIAL USE ONLY **Version**: 1.0.0 **Last Updated**: February 15, 2026"
+    }
+  ]
+}
