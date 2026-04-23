@@ -1,12 +1,16 @@
 name: "QGIA Spine Knowledge Index Publisher"
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
       - '*.md'
-      - '!README.md'
-      - '!STRUCTURE.md'
+      - '.aurora/constellation.json'
+      - 'data/**'
+      - 'policies/**'
+      - 'scripts/*.py'
+      - 'tests/**'
 
 permissions:
   contents: write
@@ -27,7 +31,13 @@ jobs:
           python-version: '3.12'
 
       - name: Generate knowledge index
-        run: python scripts/generate-knowledge-index.py
+        run: python3 scripts/generate-knowledge-index.py
+
+      - name: Validate knowledge contract
+        run: python3 scripts/validate-knowledge-contract.py
+
+      - name: Run tests
+        run: python3 -m unittest discover -s tests
 
       - name: Commit updated index
         run: |
@@ -38,7 +48,7 @@ jobs:
           git push
 
       - name: Publish event to Constellation Hub
-        if: success()
+        if: success() && secrets.CONSTELLATION_TOKEN != ''
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.CONSTELLATION_TOKEN }}

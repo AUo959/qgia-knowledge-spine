@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-18T18:18:00Z",
+  "artifact": "qgia_spine_closed_loop_bootstrap",
+  "stage": "spine-bootstrap",
+  "repo": "qgia-knowledge-spine",
+  "contract_package_ref": "qgia_knowledge_closed_loop_contract_v1",
+  "files": [
+    ".aurora/constellation.json",
+    "data/forecasts/forecast-ledger.jsonl",
+    "data/priors/prior-table.json",
+    "data/calibration/calibration-report.json",
+    "policies/resolution-policy.md"
+  ],
+  "notes": [
+    "Bootstrap state only. Library-side evidence and outcome ledgers are adopted in the sibling repo.",
+    "Calibration and prior artifacts are present but contain no scored forecast history yet."
+  ]
+}
