@@ -7,7 +7,7 @@ import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_REPO = "qgia-knowledge-spine"
@@ -33,6 +33,11 @@ SKIP_FILES = {"README.md", "STRUCTURE.md"}
 NUMBERED_DOC_RE = re.compile(r"^(\d{2})_.*\.md$")
 SUMMARY_METADATA_LINE = re.compile(r"^\*\*[^*]+\*\*:")
 BOLD_ONLY_LINE = re.compile(r"^\*\*[^*]+\*\*$")
+SUPPLEMENTAL_DOC_DIR_DOMAINS = {
+    "frameworks": "framework",
+    "schemas": "schema",
+    "methods": "method",
+}
 
 TIER_DOMAINS = {
     range(1, 7): "tier1-methodological-foundations",
@@ -44,12 +49,15 @@ TIER_DOMAINS = {
 
 def iter_spine_documents(root: Path = REPO_ROOT) -> Iterable[Path]:
     for entry in sorted(root.iterdir(), key=lambda item: item.name):
-        if not entry.is_file():
-            continue
         if entry.name.startswith(".") or entry.name in SKIP_FILES:
             continue
-        if NUMBERED_DOC_RE.match(entry.name):
+        if entry.is_file() and NUMBERED_DOC_RE.match(entry.name):
             yield entry
+            continue
+        if entry.is_dir() and entry.name in SUPPLEMENTAL_DOC_DIR_DOMAINS:
+            for md_file in sorted(entry.rglob("*.md")):
+                if md_file.name not in SKIP_FILES:
+                    yield md_file
 
 
 def get_tier_domain(doc_number: int) -> str:
@@ -122,14 +130,20 @@ def extract_metadata(filepath: Path) -> Dict[str, Any]:
     }
 
 
-def build_index(root: Path = REPO_ROOT, generated_at: str | None = None) -> Dict[str, Any]:
+def domain_for_spine_document(relative_path: Path) -> str:
+    top_level = relative_path.parts[0]
+    if top_level in SUPPLEMENTAL_DOC_DIR_DOMAINS:
+        return SUPPLEMENTAL_DOC_DIR_DOMAINS[top_level]
+    match = NUMBERED_DOC_RE.match(top_level)
+    if not match:
+        raise ValueError("Unsupported spine document path: %s" % relative_path.as_posix())
+    return get_tier_domain(int(match.group(1)))
+
+
+def build_index(root: Path = REPO_ROOT, generated_at: Optional[str] = None) -> Dict[str, Any]:
     documents: List[Dict[str, Any]] = []
 
     for entry in iter_spine_documents(root):
-        match = NUMBERED_DOC_RE.match(entry.name)
-        if not match:
-            continue
-        doc_number = int(match.group(1))
         relative_path = entry.relative_to(root)
         meta = extract_metadata(entry)
 
@@ -137,7 +151,7 @@ def build_index(root: Path = REPO_ROOT, generated_at: str | None = None) -> Dict
             {
                 "id": "qgia-spine:%s" % entry.stem,
                 "title": meta["title"],
-                "domain": get_tier_domain(doc_number),
+                "domain": domain_for_spine_document(relative_path),
                 "path": relative_path.as_posix(),
                 "checksum": meta["checksum"],
                 "word_count": meta["word_count"],
