@@ -19,16 +19,37 @@
     "ethics_protocol": true
   },
   "contracts": {
-    "published": ["knowledge-index"],
-    "consumed": ["constellation-event", "constellation-health"]
+    "published": [
+      "knowledge-index",
+      "forecast-ledger",
+      "prior-table",
+      "calibration-report",
+      "resolution-policy"
+    ],
+    "consumed": [
+      "constellation-event",
+      "constellation-health",
+      "evidence-record",
+      "outcome-record"
+    ]
   },
   "health": {
     "last_sync": null,
-    "status": "active"
+    "status": "active",
+    "closed_loop_stage": "spine-bootstrap"
   },
   "meta": {
     "created": "2026-03-13T11:00:00-04:00",
     "created_by": "Perplexity Computer",
-    "proposal_ref": "Aurora Constellation Architecture Proposal v1.0.0"
+    "proposal_ref": "Aurora Constellation Architecture Proposal v1.0.0",
+    "contract_package_ref": "qgia_knowledge_closed_loop_contract_v1",
+    "runtime_targets": [
+      {
+        "platform": "perplexity",
+        "designation": "declared-live-runtime",
+        "verification": "user-declared",
+        "url": "https://www.perplexity.ai/spaces/foreign-policy-and-global-poli-_IZgsdmvSo2Yxe7LAZ5HSQ"
+      }
+    ]
   }
 }

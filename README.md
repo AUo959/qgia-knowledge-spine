@@ -1,10 +1,20 @@
 # QGIA Knowledge Spine
 
-**Quantum Geopolitical Intelligence Agency - Comprehensive Knowledge Library**
+**Quantum Geopolitical Intelligence Agency - Methodology Backbone**
 
 ## Mission Overview
 
-This repository contains the systematic knowledge architecture supporting QGIA's quantum-inspired geopolitical forecasting capabilities. With 551 personnel, $2.847B annual budget, and 500TB daily intelligence processing, QGIA maintains 84.7% accuracy for 12-month forecasts with 127-day early warning lead times.
+This repository contains the systematic knowledge architecture and methodological backbone supporting QGIA's quantum-inspired geopolitical forecasting capabilities. It is the spine layer: methodology, cross-reference structure, and analytical backbone. The sibling `qgia-knowledge-library` repository remains the domain corpus layer. With 551 personnel, $2.847B annual budget, and 500TB daily intelligence processing, QGIA maintains 84.7% accuracy for 12-month forecasts with 127-day early warning lead times.
+
+The spine now also owns the bootstrap machine-readable closed-loop artifacts for
+forecast issuance, prior tracking, calibration reporting, and resolution policy.
+This is a repo-local adoption of the root control-plane contract package, not a
+claim that the full cross-repo learning loop is already live.
+
+The declared live runtime centered on this material is the Perplexity Space at
+<https://www.perplexity.ai/spaces/foreign-policy-and-global-poli-_IZgsdmvSo2Yxe7LAZ5HSQ>.
+This binding is recorded as `user-declared` runtime metadata in the repo rather
+than as an independently verified external fetch.
 
 ## Repository Structure
 
@@ -94,6 +104,20 @@ Contains methodological frameworks and theoretical foundations. Specific threat 
 - **Review Cycle**: Quarterly with continuous updates from 500TB daily intelligence stream
 - **Validation**: 84.7% accuracy maintained across 12-month forecast horizon
 
+## Closed-Loop Artifacts
+
+The spine is authoritative for the following machine-readable artifacts:
+
+- `data/forecasts/forecast-ledger.jsonl` - append-only forecast issuance and revision history
+- `data/priors/prior-table.json` - versioned prior and base-rate table
+- `data/calibration/calibration-report.json` - scored performance and calibration surface
+- `policies/resolution-policy.md` - resolution semantics consumed by outcome adjudication
+
+Current state: bootstrap. The artifacts are present and validated in this repo.
+The sibling `qgia-knowledge-library` repo has adopted the matching
+evidence/outcome ledgers, but the cross-repo learning loop still contains no
+appended forecast or outcome history.
+
 ## Contributing
 
 Senior Analysts within QGIA's Global Monitoring Division may submit updates through secure channels. All modifications require:
@@ -122,7 +146,8 @@ This repository is node **QGIA-SPINE** (`s.tag::qgia.spine`) in the Aurora Const
 When methodology documents are pushed to `main`, a GitHub Actions workflow automatically:
 1. Scans all spine documents
 2. Generates `.aurora/knowledge-index.json`
-3. Publishes a `qgia.knowledge.updated` event to CONSTELLATION-PRIME
+3. Validates the spine contract and runs repo tests
+4. Publishes a `qgia.knowledge.updated` event to CONSTELLATION-PRIME when the dispatch secret is configured
 
 ### Manifest
 The node manifest is at `.aurora/constellation.json`.

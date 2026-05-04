@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "artifact_type": "calibration_report",
+  "report_id": "qgia.calibration.bootstrap.2026-04-18",
+  "generated_at": "2026-04-18T18:12:00Z",
+  "producer": "qgia-knowledge-spine",
+  "sample_window": {
+    "start": "2026-04-18T18:12:00Z",
+    "end": "2026-04-18T18:12:00Z"
+  },
+  "summary": {
+    "resolved_forecast_count": 0,
+    "team_brier_score": null,
+    "team_brier_skill_score": null,
+    "expected_calibration_error": null
+  },
+  "slices": [],
+  "adjustments": [],
+  "recommendations": [
+    "Bootstrap state: no resolved forecasts have been scored yet."
+  ]
+}
