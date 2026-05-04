@@ -33,8 +33,20 @@ class KnowledgeContractTests(unittest.TestCase):
             documents["01_forecasting_methodologies.md"]["domain"],
             "tier1-methodological-foundations",
         )
+        self.assertEqual(
+            documents["frameworks/iran-war-scenario-taxonomy.md"]["domain"],
+            "framework",
+        )
+        self.assertEqual(
+            documents["schemas/probability-ledger-schema.md"]["domain"],
+            "schema",
+        )
+        self.assertEqual(
+            documents["methods/iran-regime-dirichlet-template.md"]["domain"],
+            "method",
+        )
         self.assertIn("T", documents["01_forecasting_methodologies.md"]["last_modified"])
-        self.assertEqual(len(index["documents"]), 3)
+        self.assertEqual(len(index["documents"]), 7)
 
     def test_bootstrap_forecast_ledger_allows_empty_history(self) -> None:
         failures = knowledge_contract.validate_forecast_ledger(REPO_ROOT)

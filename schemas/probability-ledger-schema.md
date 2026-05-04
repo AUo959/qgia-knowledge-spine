@@ -17,13 +17,12 @@ The probability ledger is the canonical event log for forecasted scenarios, base
 | `previous_probability` | float | Previous logged value |
 | `delta_probability` | float | Change since prior logged value |
 | `distribution_type` | string | `beta`, `dirichlet_component`, `hazard`, `bernoulli` |
-| `distribution_params` | string/json | Serialized parameter block |
-| `confidence_band` | float | Analyst-composite confidence, 0.00–1.00 |
+| `distribution_params` | JSON-serialized string | Serialized parameter object; use `{}` when no distribution parameters are available |
+| `confidence_score` | float | Analyst-composite confidence, 0.00–1.00 |
 | `data_quality` | float | Data quality component score |
 | `source_reliability` | float | Source reliability component score |
 | `methodological_rigor` | float | Methodological rigor component score |
 | `temporal_stability` | float | Temporal stability component score |
-| `quantum_coherence` | float | Inter-model coherence score |
 | `notes` | text | Update rationale or driving observation |
 
 ## Event Types
@@ -57,10 +56,10 @@ Log a new row when any of the following conditions hold:
 
 ## Confidence Components
 
-Composite confidence is derived from the geometric mean:
+Composite confidence follows the four-component QGIA Confidence Calibration Score formula:
 
 ```
-C_composite = (DQ × SR × MR × TS)^(1/4) × Coherence
+CCS = (0.30 × DQ) + (0.25 × SR) + (0.25 × MR) + (0.20 × TS)
 ```
 
 Where:
@@ -68,15 +67,14 @@ Where:
 - `SR` = Source Reliability
 - `MR` = Methodological Rigor
 - `TS` = Temporal Stability
-- `Coherence` = Quantum Coherence (inter-model agreement)
 
-All components are scored 0.00–1.00.
+All components and the resulting `confidence_score` are scored 0.00–1.00.
 
 ## Minimal CSV Example
 
 ```csv
-timestamp,theater,scenario_id,scenario_label,window,probability,previous_probability,delta_probability,distribution_type,confidence_band,notes
-2026-04-19T00:00:00Z,Iran,IRN_WAR_HORMUZ_CLOSURE_GE_60D,Hormuz closure >= 60 days,0-180d,0.37,0.31,0.06,beta,0.72,Closure sustained via attack risk and insurance shock
+timestamp,theater,scenario_id,scenario_label,window,probability,previous_probability,delta_probability,distribution_type,distribution_params,confidence_score,data_quality,source_reliability,methodological_rigor,temporal_stability,notes
+2026-04-19T00:00:00Z,Iran,IRN_WAR_HORMUZ_CLOSURE_GE_60D,Hormuz closure >= 60 days,0-180d,0.37,0.31,0.06,beta,"{""alpha"": 3.7, ""beta"": 6.3}",0.72,0.71,0.74,0.82,0.68,Closure sustained via attack risk and insurance shock
 ```
 
 ## Brier Score Integration
@@ -85,10 +83,12 @@ Once resolved events are observable, compute Brier scores against ledger entries
 
 | Range | Quality |
 |---|---|
-| BS < 0.10 | Excellent |
-| BS 0.10–0.15 | Good |
-| BS 0.15–0.20 | Acceptable |
-| BS > 0.25 | Requires recalibration |
+| BS 0.00–0.05 | Exceptional |
+| BS 0.06–0.10 | Excellent |
+| BS 0.11–0.15 | Good |
+| BS 0.16–0.20 | Acceptable |
+| BS 0.21–0.25 | Poor |
+| BS > 0.25 | Failing / requires recalibration |
 
 QGIA benchmark: BS ≈ 0.089 at 12-month horizon.
 

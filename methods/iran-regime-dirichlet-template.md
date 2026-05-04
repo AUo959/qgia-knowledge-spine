@@ -21,11 +21,13 @@ Choose a Dirichlet prior with moderate total mass (α₀ = 9.0) to allow rapid p
 
 | Scenario | α | E[p] |
 |---|---:|---:|
-| H1 — Hardline survival | 4.0 | 0.44 |
-| H2 — Managed transition | 2.0 | 0.22 |
-| H3 — Revolutionary collapse | 1.8 | 0.20 |
-| H4 — Fragmented authority | 1.2 | 0.13 |
-| **Total** | **9.0** | **1.00** |
+| H1 — Hardline survival | 4.0 | 0.444 |
+| H2 — Managed transition | 2.0 | 0.222 |
+| H3 — Revolutionary collapse | 1.8 | 0.200 |
+| H4 — Fragmented authority | 1.2 | 0.133 |
+| **Total** | **9.0** | **1.000** |
+
+Note: `E[p]` values are rounded to three decimals for readability, so displayed row values may not sum to `1.000` exactly.
 
 ## Update Logic
 

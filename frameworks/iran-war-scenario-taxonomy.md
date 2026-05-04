@@ -14,23 +14,34 @@ This document defines a canonical `scenario_id` taxonomy for Iran War 2026 asses
 
 ## Naming Convention
 
-Format: `[THEATER]_[LAYER]_[SCENARIO_NAME]`
+Format: `[ENTITY]_[LAYER]_[SCENARIO_NAME]`
+
+- `ENTITY` identifies the primary actor, state, or scope for the scenario family.
+- `LAYER` identifies the analytical layer being modeled.
+- `SCENARIO_NAME` is the stable machine-readable scenario label within that entity/layer family.
 
 Examples:
 - `IRN_REGIME_H1_HARDLINE_SURVIVAL`
 - `IRN_WAR_HORMUZ_CLOSURE_GE_60D`
 - `IRN_MODE_PROXY_ESCALATION_SLOW_BURN`
 
-### Prefix Rules
+### Segment Codes
 
-| Prefix | Meaning |
+#### Entity Codes
+
+| Entity code | Meaning |
 |---|---|
-| `IRN` | Iran theater |
+| `IRN` | Iran |
+| `ISR` | Israel |
+| `US` | United States |
+
+#### Layer Codes
+
+| Layer code | Meaning |
+|---|---|
 | `REGIME` | Internal political trajectory |
 | `WAR` | Operational or strategic war outcome |
 | `MODE` | Tactical or behavioral pathway |
-| `ISR` | Israel actor |
-| `US` | United States actor |
 
 ## Regime Trajectory Set
 
