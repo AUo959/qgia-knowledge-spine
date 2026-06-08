@@ -1,0 +1,52 @@
+# QGIA Knowledge Spine — Runtime Dependencies
+# Scoped minimal footprint for computation modules only.
+# No web framework, auth, or AI integrations — those live in aurora-cloudbank-symbolic.
+#
+# Install: pip install -r requirements.txt
+# For development: pip install -r requirements.txt -r requirements-dev.txt
+#
+# Version policy: critical packages carry a next-major upper bound.
+# Versions cross-validated against aurora-cloudbank-symbolic/requirements.txt
+# (reviewed at each hub sync).
+
+# ===================================================================
+# NUMERICAL & SCIENTIFIC COMPUTING
+# ===================================================================
+numpy>=1.24.3                       # Bayesian core, Lanchester ODE, QSFE amplitude weighting
+scipy>=1.11.4                       # ODE solver (solve_ivp), Dirichlet sampling, SMC filtering
+
+# ===================================================================
+# STATISTICS & MACHINE LEARNING
+# ===================================================================
+scikit-learn>=1.3.0                 # Ledoit-Wolf covariance estimator (evidence decorrelation pipeline)
+
+# ===================================================================
+# DATA PROCESSING
+# ===================================================================
+pandas>=2.1.0                       # Forecast ledger aggregation, prior table management
+
+# ===================================================================
+# SCHEMA VALIDATION
+# ===================================================================
+jsonschema>=4.20.0                  # Validates forecast entries against probability-ledger-schema
+python-dateutil>=2.9.0              # ISO 8601 timestamp parsing for ledger entries
+
+# ===================================================================
+# CONFIGURATION & UTILITIES
+# ===================================================================
+python-dotenv>=1.0.0                # Environment variable management (.env support)
+pyyaml>=6.0.1                       # YAML config parsing (AU_CORE_MASTER_TREE.yaml compat)
+click>=8.1.0                        # CLI interface for forecast entry scripts
+
+# ===================================================================
+# STRUCTURED LOGGING
+# ===================================================================
+structlog>=23.2.0                   # Structured logging for ABCP run records
+python-json-logger>=4.1.0           # JSON log output (constellation event compatibility)
+
+# ===================================================================
+# HTTP UTILITIES (constellation dispatch only)
+# ===================================================================
+requests>=2.32.5                    # GitHub repository-dispatch calls (CONSTELLATION_TOKEN)
+certifi>=2026.5.20                  # SSL certificates
+urllib3>=2.6.0                      # HTTP connection pooling
