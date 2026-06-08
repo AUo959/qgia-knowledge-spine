@@ -3,7 +3,7 @@
   "artifact_type": "prior_table",
   "prior_table_id": "qgia.prior_table.2026-06-08",
   "generated_at": "2026-06-08T15:36:00Z",
-  "producer": "qgia-knowledge-spine/scripts/populate-priors.py",
+  "producer": "qgia-knowledge-spine",
   "effective_from": "2026-06-08T15:36:00Z",
   "dirichlet_scale": 10.0,
   "beta_kappa": 10.0,
@@ -12,6 +12,15 @@
   "priors": [
     {
       "prior_id": "Iran_12m_DIRICHLET",
+      "hypothesis_id": "IRN_REGIME_12M_TRAJECTORY",
+      "domain": "Iran",
+      "base_rate": 0.42,
+      "calibrated_rate": 0.42,
+      "update_reason": "Bootstrap prior — Dirichlet concentration derived from QGIA Iran regime assessment v1.0; dominant scenario (hardline survival) weighted at 0.42 per analyst consensus 2026-06-08.",
+      "evidence_window": {
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-06-08T15:36:00Z"
+      },
       "theater": "Iran",
       "window": "12m",
       "distribution": "dirichlet",
@@ -56,6 +65,15 @@
     },
     {
       "prior_id": "UKR_FRONTLINE_RUS_ADVANCE_DONBAS_90D_0-90d_BETA",
+      "hypothesis_id": "UKR_FRONTLINE_RUS_ADVANCE_DONBAS_90D",
+      "domain": "Ukraine",
+      "base_rate": 0.61,
+      "calibrated_rate": 0.7535,
+      "update_reason": "Bootstrap prior — Beta distribution fit to Ukraine front-line assessment; mean 0.61 reflects Russian tactical pressure probability over 0-90d window as of 2026-06-08.",
+      "evidence_window": {
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-06-08T15:36:00Z"
+      },
       "theater": "Ukraine",
       "window": "0-90d",
       "scenario_id": "UKR_FRONTLINE_RUS_ADVANCE_DONBAS_90D",
@@ -72,6 +90,15 @@
     },
     {
       "prior_id": "VEN_STABILITY_MADURO_SUCCESSOR_CONSOLIDATES_180D_0-180d_BETA",
+      "hypothesis_id": "VEN_STABILITY_MADURO_SUCCESSOR_CONSOLIDATES_180D",
+      "domain": "Venezuela",
+      "base_rate": 0.44,
+      "calibrated_rate": 0.724,
+      "update_reason": "Bootstrap prior — Beta distribution fit to Venezuela stability assessment; mean 0.44 reflects successor consolidation probability over 0-180d window as of 2026-06-08.",
+      "evidence_window": {
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-06-08T15:36:00Z"
+      },
       "theater": "Venezuela",
       "window": "0-180d",
       "scenario_id": "VEN_STABILITY_MADURO_SUCCESSOR_CONSOLIDATES_180D",
