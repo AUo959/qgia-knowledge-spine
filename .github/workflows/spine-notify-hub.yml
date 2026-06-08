@@ -26,9 +26,6 @@ jobs:
   notify-hub:
     name: Dispatch qgia.knowledge.updated to constellation hub
     runs-on: ubuntu-latest
-    # Only fire if CONSTELLATION_TOKEN is configured; skip silently otherwise
-    # so early-dev forks don't fail on missing secrets.
-    if: ${{ secrets.CONSTELLATION_TOKEN != '' }}
 
     steps:
       - name: Fire repository_dispatch to aurora-cloudbank-symbolic
