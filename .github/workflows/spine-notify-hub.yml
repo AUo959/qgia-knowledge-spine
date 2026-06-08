@@ -1,8 +1,8 @@
 # spine-notify-hub.yml
 # Fires a repository_dispatch to aurora-cloudbank-symbolic every time
 # a commit lands on the spine's main branch. The hub's
-# constellation-event-router.yml picks up event-type: spine-knowledge-update
-# and routes it to the appropriate downstream handler.
+# constellation-event-router.yml picks up event-type: qgia.knowledge.updated
+# and routes it to aurora-cloudbank-symbolic and AuroraOS downstream.
 #
 # Required secret (set in qgia-knowledge-spine Settings > Secrets):
 #   CONSTELLATION_TOKEN  —  PAT with repo scope on aurora-cloudbank-symbolic
@@ -24,10 +24,10 @@ on:
 
 jobs:
   notify-hub:
-    name: Dispatch spine-knowledge-update to constellation hub
+    name: Dispatch qgia.knowledge.updated to constellation hub
     runs-on: ubuntu-latest
     # Only fire if CONSTELLATION_TOKEN is configured; skip silently otherwise
-    # so early-dev forks don’t fail on missing secrets.
+    # so early-dev forks don't fail on missing secrets.
     if: ${{ secrets.CONSTELLATION_TOKEN != '' }}
 
     steps:
@@ -36,7 +36,7 @@ jobs:
         with:
           token: ${{ secrets.CONSTELLATION_TOKEN }}
           repository: AUo959/aurora-cloudbank-symbolic
-          event-type: spine-knowledge-update
+          event-type: qgia.knowledge.updated
           client-payload: |
             {
               "sha": "${{ github.sha }}",
@@ -56,7 +56,7 @@ jobs:
       - name: Log dispatch result
         if: always()
         run: |
-          echo "Dispatched spine-knowledge-update"
+          echo "Dispatched qgia.knowledge.updated to aurora-cloudbank-symbolic"
           echo "SHA: ${{ github.sha }}"
           echo "Actor: ${{ github.actor }}"
           echo "Ref: ${{ github.ref }}"
