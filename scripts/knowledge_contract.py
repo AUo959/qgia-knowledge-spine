@@ -46,6 +46,17 @@ TIER_DOMAINS = {
     range(19, 25): "tier4-functional-domains",
 }
 
+# All defined closed-loop stages in advancement order.
+# Validation rejects unknown values but accepts any stage in this set,
+# allowing the spine to progress beyond spine-bootstrap without
+# triggering a contract failure.
+VALID_CLOSED_LOOP_STAGES = frozenset({
+    "spine-bootstrap",
+    "dispatch-live",
+    "hub-verified",
+    "full-operational",
+})
+
 
 def iter_spine_documents(root: Path = REPO_ROOT) -> Iterable[Path]:
     for entry in sorted(root.iterdir(), key=lambda item: item.name):
@@ -387,8 +398,14 @@ def validate_repo_contract(root: Path = REPO_ROOT) -> List[str]:
     for upstream_node in UPSTREAM_NODES:
         if upstream_node not in upstream:
             failures.append("constellation upstream must include %s" % upstream_node)
-    if health.get("closed_loop_stage") != "spine-bootstrap":
-        failures.append("constellation health.closed_loop_stage must be spine-bootstrap")
+
+    stage = health.get("closed_loop_stage")
+    if stage not in VALID_CLOSED_LOOP_STAGES:
+        failures.append(
+            "constellation health.closed_loop_stage must be one of %s; got %r"
+            % (sorted(VALID_CLOSED_LOOP_STAGES), stage)
+        )
+
     if meta.get("contract_package_ref") != "qgia_knowledge_closed_loop_contract_v1":
         failures.append("constellation meta.contract_package_ref must be qgia_knowledge_closed_loop_contract_v1")
     runtime_targets = meta.get("runtime_targets")

@@ -30,6 +30,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       - name: Generate knowledge index
         run: python3 scripts/generate-knowledge-index.py
 
