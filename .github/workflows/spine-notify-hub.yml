@@ -1,8 +1,9 @@
 # spine-notify-hub.yml
 # Fires a repository_dispatch to aurora-cloudbank-symbolic every time
-# a commit lands on the spine's main branch. The hub's
-# constellation-event-router.yml picks up event-type: qgia.knowledge.updated
-# and routes it to aurora-cloudbank-symbolic and AuroraOS downstream.
+# a commit lands on the spine's main branch, or when triggered manually.
+# The hub's constellation-event-router.yml picks up event-type:
+# qgia.knowledge.updated and routes it to aurora-cloudbank-symbolic
+# and AuroraOS downstream.
 #
 # Required secret (set in qgia-knowledge-spine Settings > Secrets):
 #   CONSTELLATION_TOKEN  —  PAT with repo scope on aurora-cloudbank-symbolic
@@ -21,6 +22,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   notify-hub:
