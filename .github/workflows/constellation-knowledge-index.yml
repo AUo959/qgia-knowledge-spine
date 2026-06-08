@@ -48,7 +48,7 @@ jobs:
           git push
 
       - name: Publish event to Constellation Hub
-        if: success() && secrets.CONSTELLATION_TOKEN != ''
+        if: success()
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.CONSTELLATION_TOKEN }}
