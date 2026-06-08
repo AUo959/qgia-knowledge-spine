@@ -1,10 +1,90 @@
 {
   "schema_version": 1,
   "artifact_type": "prior_table",
-  "prior_table_id": "qgia.prior_table.bootstrap.2026-04-18",
-  "generated_at": "2026-04-18T18:12:00Z",
-  "producer": "qgia-knowledge-spine",
-  "effective_from": "2026-04-18T18:12:00Z",
-  "priors": []
+  "prior_table_id": "qgia.prior_table.2026-06-08",
+  "generated_at": "2026-06-08T15:36:00Z",
+  "producer": "qgia-knowledge-spine/scripts/populate-priors.py",
+  "effective_from": "2026-06-08T15:36:00Z",
+  "dirichlet_scale": 10.0,
+  "beta_kappa": 10.0,
+  "prior_count": 3,
+  "theaters_covered": ["Iran", "Ukraine", "Venezuela"],
+  "priors": [
+    {
+      "prior_id": "Iran_12m_DIRICHLET",
+      "theater": "Iran",
+      "window": "12m",
+      "distribution": "dirichlet",
+      "concentration_vector": [4.2, 1.2, 1.8, 2.8],
+      "concentration_scale": 10.0,
+      "group_sum_check": 1.0,
+      "group_sum_valid": true,
+      "mean_confidence_score": 0.769,
+      "scenarios": [
+        {
+          "scenario_id": "IRN_REGIME_H1_HARDLINE_SURVIVAL",
+          "scenario_label": "Hardline survival \u2014 Khamenei successor consolidates",
+          "probability": 0.42,
+          "concentration": 4.2
+        },
+        {
+          "scenario_id": "IRN_REGIME_H2_MANAGED_TRANSITION",
+          "scenario_label": "Managed transition \u2014 pragmatist faction negotiates succession",
+          "probability": 0.28,
+          "concentration": 2.8
+        },
+        {
+          "scenario_id": "IRN_REGIME_H3_REVOLUTIONARY_COLLAPSE",
+          "scenario_label": "Revolutionary collapse \u2014 mass uprising unseats regime",
+          "probability": 0.18,
+          "concentration": 1.8
+        },
+        {
+          "scenario_id": "IRN_REGIME_H4_FRAGMENTED_AUTHORITY",
+          "scenario_label": "Fragmented authority \u2014 parallel power centres emerge",
+          "probability": 0.12,
+          "concentration": 1.2
+        }
+      ],
+      "source_scenario_ids": [
+        "IRN_REGIME_H1_HARDLINE_SURVIVAL",
+        "IRN_REGIME_H2_MANAGED_TRANSITION",
+        "IRN_REGIME_H3_REVOLUTIONARY_COLLAPSE",
+        "IRN_REGIME_H4_FRAGMENTED_AUTHORITY"
+      ],
+      "derived_from": "forecast-ledger.jsonl"
+    },
+    {
+      "prior_id": "UKR_FRONTLINE_RUS_ADVANCE_DONBAS_90D_0-90d_BETA",
+      "theater": "Ukraine",
+      "window": "0-90d",
+      "scenario_id": "UKR_FRONTLINE_RUS_ADVANCE_DONBAS_90D",
+      "scenario_label": "Russian tactical advance in Donbas within 90 days",
+      "distribution": "beta",
+      "alpha": 6.1,
+      "beta": 3.9,
+      "kappa": 10.0,
+      "mean": 0.610000,
+      "variance": 0.021450,
+      "std_dev": 0.146494,
+      "confidence_score": 0.7535,
+      "derived_from": "forecast-ledger.jsonl"
+    },
+    {
+      "prior_id": "VEN_STABILITY_MADURO_SUCCESSOR_CONSOLIDATES_180D_0-180d_BETA",
+      "theater": "Venezuela",
+      "window": "0-180d",
+      "scenario_id": "VEN_STABILITY_MADURO_SUCCESSOR_CONSOLIDATES_180D",
+      "scenario_label": "Maduro successor consolidates authority within 180 days",
+      "distribution": "beta",
+      "alpha": 4.4,
+      "beta": 5.6,
+      "kappa": 10.0,
+      "mean": 0.440000,
+      "variance": 0.023100,
+      "std_dev": 0.152000,
+      "confidence_score": 0.724,
+      "derived_from": "forecast-ledger.jsonl"
+    }
+  ]
 }
-
