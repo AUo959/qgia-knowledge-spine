@@ -5,14 +5,16 @@
     "symbolic_tag": "s.tag::qgia.spine",
     "repo": "qgia-knowledge-spine",
     "role": "spoke",
-    "stack": ["markdown"],
-    "description": "Knowledge spine — methodological backbone, cross-reference index, domain taxonomy"
+    "stack": ["markdown", "python"],
+    "description": "Knowledge spine \u2014 methodological backbone, cross-reference index, domain taxonomy, forecast ledger, prior table"
   },
   "upstream": [
     "s.tag::constellation.prime",
     "s.tag::qgia.corpus"
   ],
-  "downstream": [],
+  "downstream": [
+    "s.tag::constellation.prime"
+  ],
   "governance": {
     "charter": "Picard_Delta_3",
     "l3_modules": ["Axiomera", "Velatrix", "Glyphon", "Caelion", "Harmion"],
@@ -34,9 +36,13 @@
     ]
   },
   "health": {
-    "last_sync": null,
+    "last_sync": "2026-06-08T15:46:00Z",
     "status": "active",
-    "closed_loop_stage": "spine-bootstrap"
+    "closed_loop_stage": "dispatch-live",
+    "dispatch_target": "aurora-cloudbank-symbolic",
+    "dispatch_event": "spine-knowledge-update",
+    "phase_1_completed": "2026-06-08T15:39:00Z",
+    "phase_2_wiring_committed": "2026-06-08T15:46:00Z"
   },
   "meta": {
     "created": "2026-03-13T11:00:00-04:00",

@@ -1,0 +1,62 @@
+# spine-notify-hub.yml
+# Fires a repository_dispatch to aurora-cloudbank-symbolic every time
+# a commit lands on the spine's main branch. The hub's
+# constellation-event-router.yml picks up event-type: spine-knowledge-update
+# and routes it to the appropriate downstream handler.
+#
+# Required secret (set in qgia-knowledge-spine Settings > Secrets):
+#   CONSTELLATION_TOKEN  —  PAT with repo scope on aurora-cloudbank-symbolic
+#
+# Dispatch payload fields:
+#   sha           — triggering commit SHA
+#   ref           — full git ref (refs/heads/main)
+#   actor         — GitHub actor who pushed
+#   committed_at  — ISO-8601 timestamp of the push event
+#   spoke_tag     — symbolic tag from constellation.json
+#   contracts     — list of contracts published by this spoke
+
+name: Spine → Hub Notify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify-hub:
+    name: Dispatch spine-knowledge-update to constellation hub
+    runs-on: ubuntu-latest
+    # Only fire if CONSTELLATION_TOKEN is configured; skip silently otherwise
+    # so early-dev forks don’t fail on missing secrets.
+    if: ${{ secrets.CONSTELLATION_TOKEN != '' }}
+
+    steps:
+      - name: Fire repository_dispatch to aurora-cloudbank-symbolic
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CONSTELLATION_TOKEN }}
+          repository: AUo959/aurora-cloudbank-symbolic
+          event-type: spine-knowledge-update
+          client-payload: |
+            {
+              "sha": "${{ github.sha }}",
+              "ref": "${{ github.ref }}",
+              "actor": "${{ github.actor }}",
+              "committed_at": "${{ github.event.head_commit.timestamp }}",
+              "spoke_tag": "s.tag::qgia.spine",
+              "contracts": [
+                "knowledge-index",
+                "forecast-ledger",
+                "prior-table",
+                "calibration-report",
+                "resolution-policy"
+              ]
+            }
+
+      - name: Log dispatch result
+        if: always()
+        run: |
+          echo "Dispatched spine-knowledge-update"
+          echo "SHA: ${{ github.sha }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Ref: ${{ github.ref }}"
