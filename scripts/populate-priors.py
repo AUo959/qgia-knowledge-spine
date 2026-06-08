@@ -2,7 +2,11 @@
 """
 QGIA Knowledge Spine — Prior Table Populator
 Phase 1.4: Reads forecast-ledger.jsonl and computes initialised Bayesian
-prior distributions for each scenario, writing to data/priors/prior-table.json.
+prior distributions for each scenario, writing to data/priors/prior-table-runtime.json.
+
+NOTE: This script writes to prior-table-runtime.json, NOT prior-table.json.
+The bootstrap contract artifact (prior-table.json) must remain empty (priors: [])
+per the knowledge contract test suite. Operational priors live in the runtime file.
 
 Distribution logic:
   dirichlet_component rows  → grouped by (theater, window) and converted
@@ -32,9 +36,9 @@ log = structlog.get_logger()
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LEDGER_PATH = REPO_ROOT / "data" / "forecast-ledger.jsonl"
-PRIOR_TABLE_PATH = REPO_ROOT / "data" / "priors" / "prior-table.json"
+PRIOR_TABLE_PATH = REPO_ROOT / "data" / "priors" / "prior-table-runtime.json"
 
-# Prior table schema version — must match existing prior-table.json
+# Prior table schema version
 SCHEMA_VERSION = 1
 
 # Dirichlet pseudo-count scale factor.
@@ -96,13 +100,6 @@ def build_dirichlet_prior(group: list[dict]) -> dict:
     """
     Given a list of dirichlet_component rows sharing (theater, window),
     build a Dirichlet prior entry.
-
-    Returns a prior dict with:
-      distribution: dirichlet
-      scenarios: list of {scenario_id, label, probability, concentration}
-      concentration_vector: [c1, c2, ...] (ordered by scenario_id)
-      group_sum_check: sum of probabilities (should be ~1.0)
-      mean_confidence: mean confidence_score across the group
     """
     group_sorted = sorted(group, key=lambda r: r["scenario_id"])
     probs = np.array([r["probability"] for r in group_sorted])
@@ -147,7 +144,7 @@ def build_beta_prior(row: dict) -> dict:
     p = row["probability"]
     alpha = round(p * BETA_KAPPA, 4)
     beta_param = round((1.0 - p) * BETA_KAPPA, 4)
-    mean_p = alpha / (alpha + beta_param)  # should equal p
+    mean_p = alpha / (alpha + beta_param)
     variance = (alpha * beta_param) / ((alpha + beta_param) ** 2 * (alpha + beta_param + 1))
 
     return {
@@ -193,7 +190,6 @@ def compute_priors(rows: list[dict]) -> list[dict]:
     """
     priors = []
 
-    # Separate Dirichlet groups from individual rows
     dirichlet_groups: dict[tuple, list[dict]] = defaultdict(list)
     individual_rows: list[dict] = []
 
@@ -205,7 +201,6 @@ def compute_priors(rows: list[dict]) -> list[dict]:
         else:
             individual_rows.append(row)
 
-    # Build Dirichlet priors (one per theater+window group)
     for (theater, window), group in sorted(dirichlet_groups.items()):
         prior = build_dirichlet_prior(group)
         log.info(
@@ -217,7 +212,6 @@ def compute_priors(rows: list[dict]) -> list[dict]:
         )
         priors.append(prior)
 
-    # Build Beta/Hazard priors for individual rows
     for row in sorted(individual_rows, key=lambda r: r["scenario_id"]):
         dist_type = row.get("distribution_type", "")
         if dist_type in ("beta", "bernoulli"):
@@ -250,10 +244,10 @@ def write_prior_table(priors: list[dict], output_path: Path, dry_run: bool = Fal
 
     table = {
         "schema_version": SCHEMA_VERSION,
-        "artifact_type": "prior_table",
+        "artifact_type": "prior_table_runtime",
         "prior_table_id": f"qgia.prior_table.{now[:10]}",
         "generated_at": now,
-        "producer": "qgia-knowledge-spine/scripts/populate-priors.py",
+        "producer": "qgia-knowledge-spine",
         "effective_from": now,
         "dirichlet_scale": DIRICHLET_SCALE,
         "beta_kappa": BETA_KAPPA,
@@ -281,7 +275,7 @@ def write_prior_table(priors: list[dict], output_path: Path, dry_run: bool = Fal
 # ---------------------------------------------------------------------------
 @click.command()
 @click.option("--ledger", default=str(LEDGER_PATH), help="Path to forecast-ledger.jsonl")
-@click.option("--output", default=str(PRIOR_TABLE_PATH), help="Path to prior-table.json output")
+@click.option("--output", default=str(PRIOR_TABLE_PATH), help="Path to prior-table-runtime.json output")
 @click.option("--dry-run", is_flag=True, default=False, help="Print output without writing")
 def cli(ledger, output, dry_run):
     """Compute Bayesian prior distributions from the forecast ledger."""
