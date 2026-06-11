@@ -28,10 +28,12 @@ jobs:
   notify-hub:
     name: Dispatch qgia.knowledge.updated to constellation hub
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Fire repository_dispatch to aurora-cloudbank-symbolic
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v3.0.0
         with:
           token: ${{ secrets.CONSTELLATION_TOKEN }}
           repository: AUo959/aurora-cloudbank-symbolic
