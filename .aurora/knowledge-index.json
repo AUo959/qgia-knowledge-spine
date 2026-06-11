@@ -1,16 +1,16 @@
 {
   "version": "1.0.0",
   "source_repo": "qgia-knowledge-spine",
-  "generated_at": "2026-06-08T17:47:42.964626+00:00",
+  "generated_at": "2026-06-11T02:00:40.838516+00:00",
   "documents": [
     {
       "id": "qgia-spine:01_forecasting_methodologies",
       "title": "Forecasting Methodologies Framework",
       "domain": "tier1-methodological-foundations",
       "path": "01_forecasting_methodologies.md",
-      "checksum": "4e683f9ba4209756",
-      "word_count": 3579,
-      "last_modified": "2026-02-15T23:26:17-05:00",
+      "checksum": "2bb70e6086c13de1",
+      "word_count": 5023,
+      "last_modified": "2026-06-10T22:00:15-04:00",
       "tags": [
         "executive-overview",
         "i-superforecasting-framework",
