@@ -65,6 +65,12 @@ class KnowledgeContractTests(unittest.TestCase):
         self.assertIsNone(payload["summary"]["team_brier_score"])
         self.assertIsNone(payload["summary"]["expected_calibration_error"])
 
+    def test_pending_hub_verification_is_a_valid_closed_loop_stage(self) -> None:
+        self.assertIn(
+            "dispatch-wired-pending-hub-verification",
+            knowledge_contract.VALID_CLOSED_LOOP_STAGES,
+        )
+
     def test_validate_repo_contract_passes(self) -> None:
         failures = knowledge_contract.validate_repo_contract(REPO_ROOT)
         self.assertEqual(failures, [])
