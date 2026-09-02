@@ -52,6 +52,7 @@ TIER_DOMAINS = {
 # triggering a contract failure.
 VALID_CLOSED_LOOP_STAGES = frozenset({
     "spine-bootstrap",
+    "dispatch-wired-pending-hub-verification",
     "dispatch-live",
     "hub-verified",
     "full-operational",

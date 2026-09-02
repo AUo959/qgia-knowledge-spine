@@ -54,7 +54,7 @@ jobs:
 
       - name: Publish event to Constellation Hub
         if: success()
-        uses: peter-evans/repository-dispatch@v3.0.0
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697  # v4.0.1
         with:
           token: ${{ secrets.CONSTELLATION_TOKEN }}
           repository: AUo959/aurora-cloudbank-symbolic
@@ -66,6 +66,11 @@ jobs:
               "event_type": "qgia.knowledge.updated",
               "correlation_id": "${{ github.run_id }}-${{ github.run_number }}",
               "timestamp": "${{ github.event.head_commit.timestamp }}",
+              "hop": 0,
+              "provenance": {
+                "charter": "Picard_Delta_3",
+                "l3_compliance": true
+              },
               "payload": {
                 "commit_sha": "${{ github.sha }}",
                 "index_url": "https://raw.githubusercontent.com/AUo959/qgia-knowledge-spine/main/.aurora/knowledge-index.json"

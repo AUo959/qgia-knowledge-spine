@@ -1,63 +1,91 @@
 # spine-notify-hub.yml
-# Fires a repository_dispatch to aurora-cloudbank-symbolic every time
-# a commit lands on the spine's main branch, or when triggered manually.
-# The hub's constellation-event-router.yml picks up event-type:
-# qgia.knowledge.updated and routes it to aurora-cloudbank-symbolic
-# and AuroraOS downstream.
+# Manual / recovery dispatch of qgia.knowledge.updated to the constellation hub.
 #
-# Required secret (set in qgia-knowledge-spine Settings > Secrets):
-#   CONSTELLATION_TOKEN  —  PAT with repo scope on aurora-cloudbank-symbolic
+# CONNECTIVITY PASS 2026-08-19 — two defects fixed:
 #
-# Dispatch payload fields:
-#   sha           — triggering commit SHA
-#   ref           — full git ref (refs/heads/main)
-#   actor         — GitHub actor who pushed
-#   committed_at  — ISO-8601 timestamp of the push event
-#   spoke_tag     — symbolic tag from constellation.json
-#   contracts     — list of contracts published by this spoke
+#  1. NON-CONFORMANT PAYLOAD (the link was dead, silently).
+#     The previous client-payload was {sha, ref, actor, committed_at, spoke_tag,
+#     contracts}. The hub's constellation-event-router.yml validates every
+#     client_payload against constellation-contracts/schemas/constellation-event.schema.json,
+#     which REQUIRES event_type, source_node, timestamp and payload. None of the
+#     four were present, so validate-event failed on every push and the gated
+#     route-event job never ran. .aurora/constellation.json has claimed
+#     "closed_loop_stage": "dispatch-live" since 2026-06-08 while nothing routed.
+#
+#  2. DUPLICATE EMITTER.
+#     constellation-knowledge-index.yml already emits a schema-conformant
+#     qgia.knowledge.updated on pushes to main. This workflow fired on the same
+#     event, so every qualifying push produced two hub dispatches. The push
+#     trigger is removed here; constellation-knowledge-index.yml owns the
+#     routine path and this workflow is the manual re-fire / recovery lever.
+#
+# Required secret (qgia-knowledge-spine → Settings → Secrets → Actions):
+#   CONSTELLATION_TOKEN — PAT with repo scope on AUo959/aurora-cloudbank-symbolic
 
-name: Spine → Hub Notify
+name: Spine → Hub Notify (manual)
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why this manual re-fire is being issued (recorded in the envelope)"
+        required: false
+        default: "manual re-fire"
+
+permissions:
+  contents: read
 
 jobs:
   notify-hub:
     name: Dispatch qgia.knowledge.updated to constellation hub
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
+      - name: Guard on missing CONSTELLATION_TOKEN
+        env:
+          HAS_TOKEN: ${{ secrets.CONSTELLATION_TOKEN != '' }}
+        run: |
+          if [ "$HAS_TOKEN" != "true" ]; then
+            echo "::error::CONSTELLATION_TOKEN is not set in this repository; the hub link cannot be exercised."
+            exit 1
+          fi
+
       - name: Fire repository_dispatch to aurora-cloudbank-symbolic
-        uses: peter-evans/repository-dispatch@v3.0.0
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697  # v4.0.1
         with:
           token: ${{ secrets.CONSTELLATION_TOKEN }}
           repository: AUo959/aurora-cloudbank-symbolic
           event-type: qgia.knowledge.updated
-          client-payload: |
+          client-payload: >-
             {
-              "sha": "${{ github.sha }}",
-              "ref": "${{ github.ref }}",
-              "actor": "${{ github.actor }}",
-              "committed_at": "${{ github.event.head_commit.timestamp }}",
-              "spoke_tag": "s.tag::qgia.spine",
-              "contracts": [
-                "knowledge-index",
-                "forecast-ledger",
-                "prior-table",
-                "calibration-report",
-                "resolution-policy"
-              ]
+              "event_type": "qgia.knowledge.updated",
+              "source_node": "QGIA-SPINE",
+              "source_repo": "qgia-knowledge-spine",
+              "timestamp": "${{ github.event.repository.updated_at }}",
+              "correlation_id": "${{ github.run_id }}-${{ github.run_number }}",
+              "hop": 0,
+              "provenance": {
+                "charter": "Picard_Delta_3",
+                "l3_compliance": true
+              },
+              "payload": {
+                "commit_sha": "${{ github.sha }}",
+                "ref": "${{ github.ref }}",
+                "actor": "${{ github.actor }}",
+                "trigger": "manual",
+                "reason": ${{ toJSON(inputs.reason) }},
+                "spoke_tag": "s.tag::qgia.spine",
+                "index_url": "https://raw.githubusercontent.com/AUo959/qgia-knowledge-spine/main/.aurora/knowledge-index.json",
+                "contracts": [
+                  "knowledge-index",
+                  "forecast-ledger",
+                  "prior-table",
+                  "calibration-report",
+                  "resolution-policy"
+                ]
+              }
             }
 
       - name: Log dispatch result
         if: always()
         run: |
-          echo "Dispatched qgia.knowledge.updated to aurora-cloudbank-symbolic"
-          echo "SHA: ${{ github.sha }}"
-          echo "Actor: ${{ github.actor }}"
-          echo "Ref: ${{ github.ref }}"
+          echo "::notice::Dispatched qgia.knowledge.updated to AUo959/aurora-cloudbank-symbolic (sha=${{ github.sha }}, actor=${{ github.actor }})"
