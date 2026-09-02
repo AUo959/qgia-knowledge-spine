@@ -26,6 +26,13 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          # Full history is required, not an optimisation to skip. The index
+          # generator derives each document's `last_modified` from
+          # `git log -1 --format=%cI -- <path>`. Under the default shallow
+          # checkout only one commit exists, so every document resolves to the
+          # same timestamp, that wrong index is validated and committed, and a
+          # full-history clone then rejects it.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5.6.0
